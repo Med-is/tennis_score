@@ -1,5 +1,6 @@
 package com.bforbank.tennisscore.service;
 
+import com.bforbank.tennisscore.model.Player;
 import com.bforbank.tennisscore.model.Tennis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,18 +15,8 @@ public class TennisServiceImpl implements TennisService{
     }
 
     @Override
-    public String playerAWonBall() {
-        return tennisGame.playerAWonBall();
-    }
-
-    @Override
-    public String playerBWonBall() {
-        return tennisGame.playerBWonBall();
-    }
-
-    @Override
-    public String getScore() {
-        return tennisGame.getScore();
+    public void playerWonBall(Player player, Player opponent, StringBuilder result) {
+        tennisGame.playerWonBall(player,opponent,result);
     }
 
     @Override

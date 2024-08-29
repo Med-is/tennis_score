@@ -23,7 +23,7 @@ public class TennisGameServiceTests {
                 "Player A: 30 / Player B: 15\n" +
                 "Player A: 30 / Player B: 30\n" +
                 "Player A: 40 / Player B: 30\n" +
-                "Deuce\n" +
+                "Player A: 40 / Player B: 40\n" +
                 "Advantage Player A\n" +
                 "Deuce\n" +
                 "Advantage Player A\n" +
@@ -52,7 +52,10 @@ public class TennisGameServiceTests {
         String expected = "Player A: 15 / Player B: 0\n" +
                 "Player A: 30 / Player B: 0\n" +
                 "Player A: 40 / Player B: 0\n" +
-                "Player A wins the game";
+                "Player A wins the game\n"+
+                "Player A: 0 / Player B: 15\n"+
+                "Player A: 0 / Player B: 30\n"+
+                "Player A: 0 / Player B: 40\n";
         assertEquals(expected, result);
     }
 

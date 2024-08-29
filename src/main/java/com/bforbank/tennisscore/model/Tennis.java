@@ -4,9 +4,7 @@ import org.springframework.stereotype.Component;
 
 
 public interface Tennis {
-    String playerAWonBall();
-    String playerBWonBall();
-    String getScore();
+    public void playerWonBall(Player player, Player opponent, StringBuilder result);
     void resetGame();
     String computeScore(String input);
 }

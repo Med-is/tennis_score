@@ -4,94 +4,60 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TennisImpl implements Tennis {
-
     private static final int[] scores = {0, 15, 30, 40};
-
-    private int playerAScoreIndex = 0;
-    private int playerBScoreIndex = 0;
-    private boolean playerAAdvantage = false;
-    private boolean playerBAdvantage = false;
-
-    private boolean isWon = false;
+    private final Player playerA = new Player("Player A");
+    private final Player playerB = new Player("Player B");
 
     public String computeScore(String input) {
         StringBuilder result = new StringBuilder();
+
         for (char c : input.toCharArray()) {
             if (c == 'A') {
-                result.append(playerAWonBall());
+                playerWonBall(playerA, playerB, result);
             } else if (c == 'B') {
-                result.append(playerBWonBall());
+                playerWonBall(playerB, playerA, result);
             } else {
-                result.append("Invalid input");
+                return "Invalid input";
+            }
+
+            if (isGameWon(playerA) || isGameWon(playerB)) {
+                result.append(playerA.hasAdvantage() ? playerA.getName() : playerB.getName()).append(" wins the game\n");
                 return result.toString();
             }
-            if(isWon) return result.toString();
-            result.append(getScore()).append("\n");
-
         }
 
         return result.toString();
     }
-    public String playerAWonBall() {
-        StringBuilder result = new StringBuilder();
-        if (playerAAdvantage) {
-            result.append("Player A wins the game");
+
+    public void playerWonBall(Player player, Player opponent, StringBuilder result) {
+        if (player.hasAdvantage()) {
+            result.append(player.getName()).append(" wins the game\n");
             resetGame();
-            isWon = true;
-        } else if (playerBAdvantage) {
-            playerBAdvantage = false;
-        } else if (playerAScoreIndex == 3 && playerBScoreIndex == 3) { // deuce
-            playerAAdvantage = true;
-        } else if (playerAScoreIndex < 3) {
-            playerAScoreIndex++;
+        } else if (opponent.hasAdvantage()) {
+            opponent.setAdvantage(false);
+            result.append("Deuce\n");
+        } else if (player.getScoreIndex() == 3 && opponent.getScoreIndex() == 3) {
+            player.setAdvantage(true);
+            result.append("Advantage ").append(player.getName()).append("\n");
+        } else if (player.getScoreIndex() < 3) {
+            player.setScoreIndex(player.getScoreIndex() + 1);
+            result.append("Player A: ").append(scores[playerA.getScoreIndex()])
+                    .append(" / Player B: ").append(scores[playerB.getScoreIndex()]).append("\n");
         } else {
-            result.append("Player A wins the game");
+            result.append(player.getName()).append(" wins the game\n");
             resetGame();
-            isWon = true;
         }
-        return result.toString();
     }
 
-    public String playerBWonBall() {
-
-        StringBuilder result = new StringBuilder();
-
-        if (playerBAdvantage) {
-            result.append("Player B wins the game");
-            resetGame();
-            isWon = true;
-        } else if (playerAAdvantage) {
-            playerAAdvantage = false; // back to deuce
-        } else if (playerAScoreIndex == 3 && playerBScoreIndex == 3) { // deuce
-            playerBAdvantage = true;
-        } else if (playerBScoreIndex < 3) {
-            playerBScoreIndex++;
-        } else {
-            result.append("Player B wins the game");
-            resetGame();
-            isWon = true;
-        }
-        return result.toString();
-    }
-
-    public String getScore() {
-        StringBuilder result = new StringBuilder();
-        if (playerAAdvantage) {
-            result.append( "Advantage Player A");
-        } else if (playerBAdvantage) {
-            result.append("Advantage Player B");
-        } else if (playerAScoreIndex == 3 && playerBScoreIndex == 3) {
-            result.append("Deuce");
-        } else {
-            result.append("Player A: ").append(scores[playerAScoreIndex]).append(" / Player B: ").append(scores[playerBScoreIndex]);
-        }
-        return result.toString();
-    }
     public void resetGame() {
-        playerAScoreIndex = 0;
-        playerBScoreIndex = 0;
-        playerAAdvantage = false;
-        playerBAdvantage = false;
-        isWon = false;
+        playerA.setScoreIndex(0);
+        playerB.setScoreIndex(0);
+        playerA.setAdvantage(false);
+        playerB.setAdvantage(false);
     }
+
+    private boolean isGameWon(Player player) {
+        return player.hasAdvantage() && player.getScoreIndex() > 3;
+    }
+
 }
