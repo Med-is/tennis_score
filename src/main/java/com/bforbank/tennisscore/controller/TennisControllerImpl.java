@@ -26,7 +26,7 @@ public class TennisControllerImpl {
     }
 
     // Endpoint pour réinitialiser le jeu
-    @GetMapping("/reset")
+    @PostMapping("/reset")
     public String resetGame() {
         tennisService.resetGame();
         logger.info( "Game has been reset.");
